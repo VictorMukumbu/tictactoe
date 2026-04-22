@@ -34,6 +34,7 @@ const gameController=(()=>{
     // if currentPlayer has made a move and game isnt over
     let currentPlayer = player1;
     let gameOver = false
+    let winningCells = null;
 
     const switchPlayer =()=>{
         //check if current player is player1 if true switch player,else don't
@@ -51,10 +52,32 @@ const gameController=(()=>{
         if (board[index] !== "") return; //  prevent overwrite
         gameBoard.setCell(index,currentPlayer.marker)
 
-        if(checkWin()){
-            document.getElementById("status").textContent =`${currentPlayer.name} wins!`;
-            gameOver=true
-            return
+        //ai player
+        const getAvailableMoves = () => {
+            return gameBoard
+                .getBoard()
+                .map((cell, index) => (cell === "" ? index : null))
+                .filter(index => index !== null);
+        };
+
+        const aiMove = () => {
+            const moves = getAvailableMoves();
+            if (moves.length === 0) return;
+
+            const randomIndex = moves[Math.floor(Math.random() * moves.length)];
+            playRound(randomIndex);
+        };
+
+        const result = checkWin();
+
+        if (result) {
+            winningCells = result;
+
+            document.getElementById("status").textContent =
+                `${currentPlayer.name} wins!`;
+
+            gameOver = true;
+            return;
         }
 
         if(checkDraw()){
@@ -65,6 +88,14 @@ const gameController=(()=>{
 
         switchPlayer()
             document.getElementById("status").textContent =`${currentPlayer.name}'s turn`;
+
+        // 🤖 AI plays automatically if it's player2
+        if (!gameOver && currentPlayer === player2) {
+            setTimeout(() => {
+                aiMove();
+                displayController.render(); // re-render after AI move
+            }, 500); // small delay feels natural
+        }
     }
 
     //check for winner
@@ -76,8 +107,15 @@ const gameController=(()=>{
             [0,3,6],[1,4,7],[2,5,8],//column combinations
             [0,4,8],[2,4,6] //diagonal combinations
         ]
+        //show winning cells
+        for (let pattern of winPatterns) {
+            if (pattern.every(i => winningBoard[i] === currentPlayer.marker)) {
+                return pattern; //  return winning cells
+            }
+        }
 
-        return winPatterns.some(pattern => pattern.every(i => winningBoard[i] === currentPlayer.marker))
+        return null;
+
     }
     //check for draw
     const checkDraw=()=>{
@@ -88,10 +126,13 @@ const gameController=(()=>{
         gameBoard.resetBoard()
         currentPlayer=player1
         gameOver=false
+        winningCells = null
     }
+    //show winning cells
+    const getWinningCells = () => winningCells;
 
     //return
-    return {playRound,getCurrentPlayer,resetGame}
+    return {playRound,getCurrentPlayer,resetGame,getWinningCells}
 
 })()
 
@@ -102,10 +143,17 @@ const displayController =(()=>{
     const render = () => {
         boardDiv.innerHTML = "";
 
+        const winningCells = gameController.getWinningCells();
+
         gameBoard.getBoard().forEach((cell, index) => {
         const cellDiv = document.createElement("div");
         cellDiv.classList.add("cell");
         cellDiv.textContent = cell;
+
+        //add win class to winning cells
+        if (winningCells && winningCells.includes(index)) {
+            cellDiv.classList.add("win");
+        }
 
         cellDiv.addEventListener("click", () => {
             gameController.playRound(index);

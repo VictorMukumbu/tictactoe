@@ -17,3 +17,32 @@ body{
   justify-content: center;
   cursor: pointer;
 }
+
+/* .win {
+  background-color: rgb(185, 237, 185);
+  color: red;
+  font-weight: bold;
+  border: 1px solid green;
+} */
+
+.win {
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+  animation: pop 0.4s ease;
+}
+
+/* animation */
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+    background-color: #81c784;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
