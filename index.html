@@ -3,16 +3,51 @@
 <head>
   <title>Tic Tac Toe</title>
   <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
-  <h1>Tic Tac Toe</h1>
+  <div class="container">
+    <h1>Tic Tac Toe</h1>
+    <div id="controls">
+        <input id="player1Name" placeholder="Player 1 name" />
 
-  <div id="board"></div>
+        <input id="player2Name" placeholder="Player 2 name" />
 
-  <p id="status"></p>
+        <select id="mode">
+            <option value="pvp">Player vs Player</option>
+            <option value="ai">Player vs AI</option>
+        </select>
 
-  <button id="restart">Restart</button>
+        <button id="start">Start Game</button>
+    </div>
+
+    <div id="scoreboard">
+        <div class="score-box">
+            <span id="p1Label">Player 1</span>
+            <strong id="p1Score">0</strong>
+        </div>
+
+        <div class="score-box">
+            <span id="drawLabel">Draws</span>
+            <strong id="drawScore">0</strong>
+        </div>
+
+        <div class="score-box">
+            <span id="p2Label">Player 2</span>
+            <strong id="p2Score">0</strong>
+        </div>
+    </div>
+
+    <div id="board"></div>
+    <p id="turnIndicator"></p>
+
+    <p id="status"></p>
+
+    
+
+    <button id="restart">Restart</button>
+  </div>
 
   <script src="script.js"></script>
 </body>

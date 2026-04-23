@@ -1,21 +1,113 @@
-body{
-    /* background-color: red; */
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #121212;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  max-width: 320px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+h1 {
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  text-align: center;
+}
+#controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+input, select {
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+}
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  background: #4caf50;
+  color: white;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #66bb6a;
+}
+
+#restart {
+  background: #f44336;
+}
+
+#restart:hover {
+  background: #e57373;
+}
+#status {
+  font-weight: bold;
+  margin: 5px 0;
 }
 #board {
-  display: grid;
-  grid-template-columns: repeat(3, 100px);
+  display: none;
+  grid-template-columns: repeat(3, 1fr);
   gap: 5px;
+  width: min(90vw, 300px);
+  color: green;
+}
+
+#scoreboard {
+  display: none;
+  gap: 10px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.score-box {
+  flex: 1;
+  padding: 8px;
+  font-size: 0.9rem;
+}
+
+.score-box span {
+  display: block;
+  font-size: 0.8rem;
+  color: #aaa;
 }
 
 .cell {
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   background: #eee;
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 5vw, 2rem);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+.cell:hover {
+  background: #2c2c2c;
+  /* background: #3a3a3a; */
+}
+.cell.disabled {
+  pointer-events: none;
+  opacity: 0.6;
 }
 
 /* .win {
@@ -46,3 +138,66 @@ body{
   }
 }
 
+/* 📱 Mobile responsiveness */
+@media (max-width: 480px) {
+
+  body {
+    align-items: flex-start; /* prevent vertical squish */
+  }
+
+  .container {
+    width: 100%;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+
+  /* Stack controls vertically */
+  #controls {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  input, select, button {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  /* Make board fit screen */
+  #board {
+    width: 100%;
+    max-width: 300px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .cell {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    font-size: 1.8rem;
+  }
+
+  /* Scoreboard shrink */
+  #scoreboard {
+    width: 100%;
+    gap: 5px;
+  }
+
+  .score-box {
+    padding: 6px;
+    font-size: 0.85rem;
+  }
+
+  /* Better touch feedback */
+  .cell:hover {
+    background: #eee; /* disable hover effect on mobile */
+  }
+
+  .cell:active {
+    background: #ccc;
+  }
+}
